@@ -1,4 +1,5 @@
 import 'package:cancha_tenis/services/court_service.dart';
+import 'package:cancha_tenis/services/forecast_service.dart';
 import 'package:cancha_tenis/services/time_service.dart';
 import 'package:drift/drift.dart';
 
@@ -29,13 +30,16 @@ class ScheduleService {
     for (var s in schedules) {
       Court court = await CourtService.getCourtById(s.court);
       Time time = await TimeService.getTimeById(s.time);
+      int precipitation =
+          await ForecastService.getPricipitationProbabilityMax(s.date);
 
       fullSchedules.add(FullSchedule(
           id: s.id,
           court: court.name,
           time: time.hours,
           date: s.date,
-          username: s.username));
+          username: s.username,
+          precipitation: precipitation));
     }
 
     return fullSchedules;

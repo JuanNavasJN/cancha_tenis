@@ -61,7 +61,7 @@ class ScheduledCard extends StatelessWidget {
               const Icon(Icons.cloudy_snowing),
               Padding(
                 padding: const EdgeInsets.only(left: 5.0),
-                child: Text(rain,
+                child: Text("${schedule.precipitation.toString()}%",
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.w500)),
               )

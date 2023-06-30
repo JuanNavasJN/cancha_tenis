@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
           Expanded(
             child: Consumer<AppState>(builder: (context, appState, child) {
               if (appState.schedules == null) {
-                return Container();
+                return const Center(child: CircularProgressIndicator());
               } else {
                 return ListView(
                     padding: const EdgeInsets.only(top: 15.0),
