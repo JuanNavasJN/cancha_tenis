@@ -1,7 +1,9 @@
 import 'package:cancha_tenis/screens/schedule_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../constants/colors.dart';
+import '../state/app_state.dart';
 import '../widgets/app_scaffold.dart';
 import '../widgets/custom_icon_button.dart';
 import '../widgets/scheduled_card.dart';
@@ -16,24 +18,17 @@ class HomeScreen extends StatelessWidget {
         children: <Widget>[
           const Top(),
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.only(top: 15.0),
-              children: const [
-                ScheduledCard(),
-                // ScheduledCard(),
-                // ScheduledCard(),
-                // ScheduledCard(),
-                // ScheduledCard(),
-                // ScheduledCard(),
-                // ScheduledCard(),
-                // ScheduledCard(),
-                // ScheduledCard(),
-                // ScheduledCard(),
-                // ScheduledCard(),
-                // ScheduledCard(),
-                // ScheduledCard(),
-              ],
-            ),
+            child: Consumer<AppState>(builder: (context, appState, child) {
+              if (appState.schedules == null) {
+                return Container();
+              } else {
+                return ListView(
+                    padding: const EdgeInsets.only(top: 15.0),
+                    children: appState.schedules!
+                        .map((schedule) => ScheduledCard(schedule: schedule))
+                        .toList());
+              }
+            }),
           )
         ],
       ),

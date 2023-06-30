@@ -2,15 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
 
-class NameField extends StatefulWidget {
-  const NameField({super.key});
+class NameField extends StatelessWidget {
+  const NameField({super.key, required this.onChange});
 
-  @override
-  State<NameField> createState() => _NameFieldState();
-}
+  final Function(String) onChange;
 
-class _NameFieldState extends State<NameField> {
-  String? nameValue;
   final name = 'Nombre';
 
   @override
@@ -35,9 +31,7 @@ class _NameFieldState extends State<NameField> {
                 borderRadius: BorderRadius.circular(10.0)),
             height: 50.0,
             child: TextField(
-              onChanged: (value) {
-                nameValue = value;
-              },
+              onChanged: onChange,
               decoration: const InputDecoration(
                   hintText: hint,
                   border: InputBorder.none,

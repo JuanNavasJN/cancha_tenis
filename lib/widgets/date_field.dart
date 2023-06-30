@@ -3,19 +3,14 @@ import 'package:intl/intl.dart';
 
 import '../constants/colors.dart';
 
-class DateField extends StatefulWidget {
-  const DateField({super.key});
+class DateField extends StatelessWidget {
+  const DateField(
+      {super.key, required this.onChange, required this.selectedDate});
 
-  @override
-  State<DateField> createState() => _DateFieldState();
-}
-
-class _DateFieldState extends State<DateField> {
-  DateTime? selectedDate;
-  bool showDate = false;
+  final Function(DateTime) onChange;
+  final DateTime? selectedDate;
   final name = 'Fecha';
 
-  // Select for Date
   Future _selectDate(BuildContext context) async {
     final selected = await showDatePicker(
       context: context,
@@ -24,11 +19,8 @@ class _DateFieldState extends State<DateField> {
       lastDate: DateTime(2030),
     );
     if (selected != null && selected != selectedDate) {
-      setState(() {
-        selectedDate = selected;
-      });
+      onChange(selected);
     }
-    // return selectedDate;
   }
 
   String getDate() {

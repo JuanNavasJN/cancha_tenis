@@ -1,6 +1,8 @@
 import 'package:cancha_tenis/constants/colors.dart';
 import 'package:flutter/material.dart';
 
+import '../services/court_service.dart';
+
 const List<String> list = <String>[
   'Cancha A | 14-17',
   'Cancha B | 14-17',
@@ -9,7 +11,11 @@ const List<String> list = <String>[
 ];
 
 class CourtSelect extends StatefulWidget {
-  const CourtSelect({super.key});
+  const CourtSelect(
+      {super.key, required this.onChange, required this.selectedDate});
+
+  final Function(CourtMetadata) onChange;
+  final DateTime selectedDate;
 
   @override
   State<CourtSelect> createState() => _CourtSelectState();
@@ -17,9 +23,26 @@ class CourtSelect extends StatefulWidget {
 
 class _CourtSelectState extends State<CourtSelect> {
   String? dropdownValue;
+  List<CourtMetadata> courts = [];
 
   final name = 'Cancha';
   final hint = 'Seleccionar cancha';
+
+  @override
+  void initState() {
+    super.initState();
+
+    setCourts();
+  }
+
+  Future<void> setCourts() async {
+    List<CourtMetadata> courtsOptions =
+        await CourtService.getAvailableCourts(widget.selectedDate);
+
+    setState(() {
+      courts = courtsOptions;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,15 +80,16 @@ class _CourtSelectState extends State<CourtSelect> {
                 height: 0,
               ),
               onChanged: (String? value) {
-                // This is called when the user selects an item.
                 setState(() {
                   dropdownValue = value!;
                 });
+
+                widget.onChange(courts.firstWhere((c) => c.label == value));
               },
-              items: list.map<DropdownMenuItem<String>>((String value) {
+              items: courts.map<DropdownMenuItem<String>>((court) {
                 return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
+                  value: court.label,
+                  child: Text(court.label),
                 );
               }).toList(),
             ),

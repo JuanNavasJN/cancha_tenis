@@ -1,8 +1,6 @@
 import 'database.dart';
 
 Future<void> initializeDb() async {
-  final db = MyDatabase();
-
   final allCourts = await db.select(db.courts).get();
   final allTimes = await db.select(db.times).get();
 

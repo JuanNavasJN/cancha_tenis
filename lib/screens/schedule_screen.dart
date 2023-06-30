@@ -1,6 +1,11 @@
 import 'package:cancha_tenis/constants/colors.dart';
+import 'package:cancha_tenis/models/create_schedule.dart';
+import 'package:cancha_tenis/services/court_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../helpers/alert_dialog.dart';
+import '../state/app_state.dart';
 import '../widgets/app_scaffold.dart';
 import '../widgets/court_select.dart';
 import '../widgets/custom_button.dart';
@@ -8,8 +13,21 @@ import '../widgets/custom_icon_button.dart';
 import '../widgets/date_field.dart';
 import '../widgets/name_field.dart';
 
-class ScheduleScreen extends StatelessWidget {
+class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});
+
+  @override
+  State<ScheduleScreen> createState() => _ScheduleScreenState();
+}
+
+class _ScheduleScreenState extends State<ScheduleScreen> {
+  DateTime? date;
+  CourtMetadata? court;
+  String? username;
+
+  bool isValid() {
+    return court == null || date == null || username == null || username == '';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +41,57 @@ class ScheduleScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Column(
-                    children: [DateField(), CourtSelect(), NameField()],
+                  Column(
+                    children: [
+                      DateField(
+                        onChange: (value) {
+                          setState(() {
+                            date = value;
+                          });
+                        },
+                        selectedDate: date,
+                      ),
+                      date == null
+                          ? Container()
+                          : CourtSelect(
+                              selectedDate: date!,
+                              onChange: (selectedCourt) {
+                                setState(() {
+                                  court = selectedCourt;
+                                });
+                              },
+                            ),
+                      court == null
+                          ? Container()
+                          : NameField(
+                              onChange: (value) {
+                                setState(() {
+                                  username = value;
+                                });
+                              },
+                            )
+                    ],
                   ),
-                  CustomButton(
-                    text: 'AGENDAR',
-                    onPressed: () {},
-                    color: kSuccessColor,
-                  )
+                  isValid()
+                      ? Container()
+                      : Consumer<AppState>(builder: (context, appState, child) {
+                          return CustomButton(
+                            text: 'AGENDAR',
+                            onPressed: () {
+                              appState.addSchedule(CreateSchedule(
+                                  courtId: court!.courtId,
+                                  timeId: court!.timeId,
+                                  date: date!,
+                                  username: username!));
+                              Navigator.pop(context);
+                              showAlertDialog(
+                                context: context,
+                                content: "Agendamiento agregado.",
+                              );
+                            },
+                            color: kSuccessColor,
+                          );
+                        })
                 ],
               ),
             ),

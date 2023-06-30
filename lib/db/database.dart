@@ -39,6 +39,8 @@ class MyDatabase extends _$MyDatabase {
   int get schemaVersion => 1;
 }
 
+final MyDatabase db = MyDatabase();
+
 LazyDatabase _openConnection() {
   // the LazyDatabase util lets us find the right location for the file async.
   return LazyDatabase(() async {

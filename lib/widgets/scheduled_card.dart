@@ -1,44 +1,18 @@
+import 'package:cancha_tenis/state/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../constants/colors.dart';
+import '../helpers/alert_dialog.dart';
+import '../models/full_schedule.dart';
 import 'custom_icon_button.dart';
 
 class ScheduledCard extends StatelessWidget {
-  const ScheduledCard({super.key});
+  const ScheduledCard({super.key, required this.schedule});
 
-  final court = 'Cancha A | 9-12';
-  final date = '12/07/2023';
-  final name = 'Anett Numa Perez';
+  final FullSchedule schedule;
   final rain = '99%';
-
-  showAlertDialog(BuildContext context) {
-    Widget cancelButton = TextButton(
-      child: const Text(
-        "No",
-        style: TextStyle(color: kTextColor),
-      ),
-      onPressed: () => Navigator.pop(context),
-    );
-    Widget continueButton = TextButton(
-      child: const Text("Si"),
-      onPressed: () {},
-    );
-
-    AlertDialog alert = AlertDialog(
-      content: const Text("¿Seguro de que desea eliminar el agendamiento?"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +36,7 @@ class ScheduledCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 2.0),
                 child: Text(
-                  court,
+                  "Cancha ${schedule.court} | ${schedule.time}",
                   style: const TextStyle(
                       fontSize: 14, fontWeight: FontWeight.w400),
                 ),
@@ -70,13 +44,13 @@ class ScheduledCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 2.0),
                 child: Text(
-                  date,
+                  DateFormat('dd/MM/yyyy').format(schedule.date),
                   style: const TextStyle(
                       fontSize: 14, fontWeight: FontWeight.w400),
                 ),
               ),
               Text(
-                name,
+                schedule.username,
                 style:
                     const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
               ),
@@ -93,10 +67,22 @@ class ScheduledCard extends StatelessWidget {
               )
             ],
           ),
-          CustomIconButton(
-              bgColor: kErrorColor,
-              icon: const Icon(Icons.delete),
-              onPressed: () => showAlertDialog(context))
+          Consumer<AppState>(
+            builder: (context, appState, child) {
+              return CustomIconButton(
+                  bgColor: kErrorColor,
+                  icon: const Icon(Icons.delete),
+                  onPressed: () => showAlertDialog(
+                      context: context,
+                      content: "¿Seguro que desea eliminar el agendamiento?",
+                      showActions: true,
+                      onReject: () => Navigator.pop(context),
+                      onAccept: () {
+                        appState.deleteSchedule(schedule.id);
+                        Navigator.pop(context);
+                      }));
+            },
+          )
         ]),
       ),
     );
