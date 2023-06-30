@@ -12,11 +12,16 @@ class AppScaffold extends StatelessWidget {
     return Scaffold(
       backgroundColor: kBackgroundColor,
       body: SafeArea(
-        child: Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
-            child: child,
-          ),
+        child: Flex(
+          direction: Axis.vertical,
+          children: [
+            Expanded(
+                child: Padding(
+              padding:
+                  const EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
+              child: child,
+            ))
+          ],
         ),
       ),
     );

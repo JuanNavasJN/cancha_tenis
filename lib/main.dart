@@ -1,9 +1,14 @@
 import 'package:cancha_tenis/constants/colors.dart';
 import 'package:flutter/material.dart';
 
+import 'db/initialize.dart';
 import 'screens/home_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  initializeDb();
+
   runApp(const MyApp());
 }
 
