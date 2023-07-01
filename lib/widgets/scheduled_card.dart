@@ -56,17 +56,19 @@ class ScheduledCard extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-            children: [
-              const Icon(Icons.cloudy_snowing),
-              Padding(
-                padding: const EdgeInsets.only(left: 5.0),
-                child: Text("${schedule.precipitation.toString()}%",
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.w500)),
-              )
-            ],
-          ),
+          schedule.precipitation != null
+              ? Row(
+                  children: [
+                    const Icon(Icons.cloudy_snowing),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5.0),
+                      child: Text("${schedule.precipitation.toString()}%",
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w500)),
+                    )
+                  ],
+                )
+              : Container(),
           Consumer<AppState>(
             builder: (context, appState, child) {
               return CustomIconButton(

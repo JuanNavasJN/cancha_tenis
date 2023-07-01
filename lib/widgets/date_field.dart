@@ -29,7 +29,8 @@ class _DateFieldState extends State<DateField> {
     if (selected != null && selected != widget.selectedDate) {
       widget.onChange(selected);
 
-      int prob = await ForecastService.getPricipitationProbabilityMax(selected);
+      int? prob =
+          await ForecastService.getPricipitationProbabilityMax(selected);
 
       setState(() {
         precipitation = prob;

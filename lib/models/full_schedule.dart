@@ -12,5 +12,5 @@ class FullSchedule {
   String time;
   DateTime date;
   String username;
-  int precipitation;
+  int? precipitation;
 }

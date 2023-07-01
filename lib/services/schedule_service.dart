@@ -30,7 +30,7 @@ class ScheduleService {
     for (var s in schedules) {
       Court court = await CourtService.getCourtById(s.court);
       Time time = await TimeService.getTimeById(s.time);
-      int precipitation =
+      int? precipitation =
           await ForecastService.getPricipitationProbabilityMax(s.date);
 
       fullSchedules.add(FullSchedule(
